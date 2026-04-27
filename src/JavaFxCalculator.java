@@ -62,6 +62,10 @@ public class JavaFxCalculator extends Application {
                 compute();
                 lastOperator = '÷';
                 break;
+            case "^":
+                compute();
+                lastOperator = '^';
+                break;
             case "=":
                 compute();
                 lastOperator = '=';
@@ -93,6 +97,8 @@ public class JavaFxCalculator extends Application {
             result *= inNum;
         } else if (lastOperator == '÷') {
             result /= inNum;
+        } else if(lastOperator == '^'){
+            this.result = (int) Math.pow(this.result,inNum);
         } else if (lastOperator == '=') {
             // Keep the result for the next operation
         }
@@ -138,7 +144,8 @@ public class JavaFxCalculator extends Application {
         for (int i = 0; i < btns.length; ++i) {
             btns[i] = new Button(btnLabels[i]);
             btns[i].setOnAction(handler);  // Register event handler
-            btns[i].setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);  // full-width
+            btns[i].setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);// full-width
+
             paneButton.add(btns[i], i % numCols, i / numCols);  // control, col, row
         }
 
