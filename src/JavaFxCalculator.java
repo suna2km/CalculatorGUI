@@ -1,3 +1,8 @@
+/**
+ * @author Suna Aregay
+ * @see <a href="{https://github.com/suna2km/CalculatorGUI</a>
+ */
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -49,13 +54,13 @@ public class JavaFxCalculator extends Application {
                 compute();
                 lastOperator = '-';
                 break;
-            case "x":
+            case "*":
                 compute();
                 lastOperator = '*';
                 break;
-            case "/":
+            case "÷":
                 compute();
-                lastOperator = '/';
+                lastOperator = '÷';
                 break;
             case "=":
                 compute();
@@ -86,7 +91,7 @@ public class JavaFxCalculator extends Application {
             result -= inNum;
         } else if (lastOperator == '*') {
             result *= inNum;
-        } else if (lastOperator == '/') {
+        } else if (lastOperator == '÷') {
             result /= inNum;
         } else if (lastOperator == '=') {
             // Keep the result for the next operation
@@ -99,10 +104,13 @@ public class JavaFxCalculator extends Application {
     public void start(Stage primaryStage) {
         Button[] btns;          // 16 buttons
         String[] btnLabels = {  // Labels of 16 buttons
-                "7", "8", "9", "+",
-                "4", "5", "6", "-",
-                "1", "2", "3", "x",
-                "C", "0", "=", "/","^"
+                "Off","Dark", "Light", "+",
+                "7", "8", "9", "-",
+                "4", "5", "6", "*",
+                "1", "2", "3","÷",  //÷unicode for div
+                ".", "0", "=", "√", //√square root
+                "C","CE","←","^",   //BACKSPACE←
+                "M+","M-","MR","MC"
         };
 
         // Setup the Display TextField
@@ -112,7 +120,6 @@ public class JavaFxCalculator extends Application {
 
         // Setup a GridPane for 4x4 Buttons
         int numCols = 4;
-        int numRows = 4;
         GridPane paneButton = new GridPane();
         paneButton.setPadding(new Insets(15, 0, 15, 0));  // top, right, bottom, left
         paneButton.setVgap(5);  // Vertical gap between nodes
@@ -126,8 +133,8 @@ public class JavaFxCalculator extends Application {
             paneButton.getColumnConstraints().add(columns[i]);
         }
 
-        // Setup 16 Buttons and add to GridPane; and event handler
-        btns = new Button[17];
+        // Setup 28 Buttons and add to GridPane; and event handler
+        btns = new Button[28];
         for (int i = 0; i < btns.length; ++i) {
             btns[i] = new Button(btnLabels[i]);
             btns[i].setOnAction(handler);  // Register event handler
