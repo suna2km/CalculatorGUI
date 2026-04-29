@@ -21,7 +21,7 @@ import javafx.geometry.Pos;
 public class JavaFxCalculator extends Application {
     private TextField tfDisplay;    // top level text field
     // For computation
-    private int result = 0;      // Result of computation
+    private double result = 0;      // Result of computation
     private String inStr = "0";  // used to control what the text field(tfDisplay) is displaying
     private char lastOperator = ' '; // Previous operator: ' '(nothing), '+', '-', '*', '/', '='
 
@@ -32,6 +32,7 @@ public class JavaFxCalculator extends Application {
             // Number buttons
             case "0": case "1": case "2": case "3": case "4":
             case "5": case "6": case "7": case "8": case "9":
+            case ".":
                 if (inStr.equals("0")) {
                     inStr = currentBtnLabel;  // no leading zero
                 } else {
@@ -85,7 +86,7 @@ public class JavaFxCalculator extends Application {
     // Perform computation on the previous result and the current input number,
     // based on the previous operator.
     private void compute() {
-        int inNum = Integer.parseInt(inStr);
+        double inNum = Double.parseDouble(inStr);
         inStr = "0";
         if (lastOperator == ' ') {
             result = inNum;
@@ -98,7 +99,7 @@ public class JavaFxCalculator extends Application {
         } else if (lastOperator == '÷') {
             result /= inNum;
         } else if(lastOperator == '^'){
-            this.result = (int) Math.pow(this.result,inNum);
+            result = Math.pow(result,inNum);
         } else if (lastOperator == '=') {
             // Keep the result for the next operation
         }
@@ -108,8 +109,8 @@ public class JavaFxCalculator extends Application {
     // Setup the UI
     @Override
     public void start(Stage primaryStage) {
-        Button[] btns;          // 16 buttons
-        String[] btnLabels = {  // Labels of 16 buttons
+        Button[] btns;          // 28 buttons
+        String[] btnLabels = {  // Labels of 28 buttons
                 "Off","Dark", "Light", "+",
                 "7", "8", "9", "-",
                 "4", "5", "6", "*",
