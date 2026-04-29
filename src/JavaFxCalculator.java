@@ -4,16 +4,15 @@
  */
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -26,9 +25,13 @@ public class JavaFxCalculator extends Application {
     private String inStr = "0";  // used to control what the text field(tfDisplay) is displaying
     private char lastOperator = ' '; // Previous operator: ' '(nothing), '+', '-', '*', '/', '='
 
+    private Text memoryText; //GUI control
+    private double memory = 0.0; //
+
     // Event handler for all the 16 Buttons
     EventHandler handler = evt -> {
         String currentBtnLabel = ((Button)evt.getSource()).getText();
+        double inNum = Double.parseDouble(inStr);
         switch (currentBtnLabel) {
             case ".":
                 if (inStr.equals("0") || !inStr.contains(".")) {
@@ -78,6 +81,20 @@ public class JavaFxCalculator extends Application {
                 lastOperator = '=';
                 break;
 
+            case "M+":
+                if (this.lastOperator != '='){
+                    memory += inNum;
+                } else
+                    memory += result;
+                memoryText.setText("Memory = " + memory);
+                break;
+            case "M-":
+                if (this.lastOperator != '='){
+                    memory -= inNum;
+                } else
+                    memory -= result;
+                memoryText.setText("Memory = " + memory);
+                break;
             // Clear button
             case "C":
                 result = 0;
@@ -85,7 +102,6 @@ public class JavaFxCalculator extends Application {
                 lastOperator = ' ';
                 tfDisplay.setText("0");
                 break;
-            case "M+":
 
         }
     };
@@ -163,6 +179,9 @@ public class JavaFxCalculator extends Application {
         root.setPadding(new Insets(15, 15, 15, 15));  // top, right, bottom, left
         root.setTop(tfDisplay);     // Top zone contains the TextField
         root.setCenter(paneButton); // Center zone contains the GridPane of Buttons
+
+        memoryText = new Text("Memory = 0.0");
+        root.setBottom(memoryText); //add the memory Text GUI control to bottom of screen
 
         // Set up scene and stage
         primaryStage.setScene(new Scene(root, 300, 300));
