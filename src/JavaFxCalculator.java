@@ -19,9 +19,10 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 public class JavaFxCalculator extends Application {
+
     private TextField tfDisplay;    // top level text field
     // For computation
-    private double result = 0;      // Result of computation
+    private double result = 0.0;      // Result of computation
     private String inStr = "0";  // used to control what the text field(tfDisplay) is displaying
     private char lastOperator = ' '; // Previous operator: ' '(nothing), '+', '-', '*', '/', '='
 
@@ -29,10 +30,15 @@ public class JavaFxCalculator extends Application {
     EventHandler handler = evt -> {
         String currentBtnLabel = ((Button)evt.getSource()).getText();
         switch (currentBtnLabel) {
+            case ".":
+                if (inStr.equals("0") || !inStr.contains(".")) {
+                    inStr += ".";
+                    tfDisplay.setText(inStr);
+                }
+                break;
             // Number buttons
             case "0": case "1": case "2": case "3": case "4":
             case "5": case "6": case "7": case "8": case "9":
-            case ".":
                 if (inStr.equals("0")) {
                     inStr = currentBtnLabel;  // no leading zero
                 } else {
@@ -79,6 +85,8 @@ public class JavaFxCalculator extends Application {
                 lastOperator = ' ';
                 tfDisplay.setText("0");
                 break;
+            case "M+":
+
         }
     };
 
