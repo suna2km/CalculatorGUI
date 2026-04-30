@@ -107,11 +107,21 @@ public class JavaFxCalculator extends Application {
                 memoryText.setText("Memory = " + memory);
                 break;
 
+            case "MR":
+                inStr = String.valueOf(memory);
+                tfDisplay.setText(String.valueOf(memory));
             case "MC":
                 memoryText.setText("Memory = 0.0");
                 memory = 0;
                 break;
 
+            case "←":
+                if (inStr.length() == 1){
+                    inStr = "0";
+                } else
+                    inStr = inStr.substring(0,inStr.length()-1);
+                tfDisplay.setText(inStr);
+                break;
             // Clear button
             case "C":
                 result = 0;
@@ -120,6 +130,10 @@ public class JavaFxCalculator extends Application {
                 tfDisplay.setText("0");
                 break;
 
+            case "CE":
+                inStr = "0";
+                tfDisplay.setText("0");
+                break;
         }
     };
 
