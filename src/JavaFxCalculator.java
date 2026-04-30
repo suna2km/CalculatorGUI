@@ -76,6 +76,16 @@ public class JavaFxCalculator extends Application {
                 compute();
                 lastOperator = '^';
                 break;
+            case "√":
+                if (this.lastOperator != '=') {
+                    result += inNum;
+                }
+                result = Math.sqrt(result);
+                inStr = ""+ result;
+                tfDisplay.setText(inStr);
+                lastOperator = '=';
+                inStr = "0";
+                break;
             case "=":
                 compute();
                 lastOperator = '=';
@@ -88,6 +98,7 @@ public class JavaFxCalculator extends Application {
                     memory += result;
                 memoryText.setText("Memory = " + memory);
                 break;
+
             case "M-":
                 if (this.lastOperator != '='){
                     memory -= inNum;
@@ -95,6 +106,12 @@ public class JavaFxCalculator extends Application {
                     memory -= result;
                 memoryText.setText("Memory = " + memory);
                 break;
+
+            case "MC":
+                memoryText.setText("Memory = 0.0");
+                memory = 0;
+                break;
+
             // Clear button
             case "C":
                 result = 0;
@@ -171,6 +188,11 @@ public class JavaFxCalculator extends Application {
             btns[i].setOnAction(handler);  // Register event handler
             btns[i].setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);// full-width
 
+            switch (btnLabels[i]){
+                case "M+": case "M-": case "MR": case "MC":
+                    btns[i].setStyle("-fx-color: blue");
+                    break;
+            }
             paneButton.add(btns[i], i % numCols, i / numCols);  // control, col, row
         }
 
