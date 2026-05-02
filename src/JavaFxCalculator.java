@@ -80,10 +80,11 @@ public class JavaFxCalculator extends Application {
                 if (this.lastOperator != '=') {
                     result += inNum;
                 }
+                double beforeSqrt = result;
                 result = Math.sqrt(result);
                 inStr = ""+ result;
                 tfDisplay.setText(inStr);
-
+                calcHistory.appendText("√" + beforeSqrt + " = " + result + "\n");
                 lastOperator = '=';
                 inStr = "0";
                 break;
@@ -164,8 +165,9 @@ public class JavaFxCalculator extends Application {
         }
         tfDisplay.setText(result + "");
 
+        if (lastOperator != ' ') {
         calcHistory.appendText(expression + " = " + result + "\n");
-
+        }
     }
 
     // Setup the UI
@@ -260,7 +262,7 @@ public class JavaFxCalculator extends Application {
         memoryText = new Text("Memory = 0.0");
         root.setBottom(memoryText); //add the memory Text GUI control to bottom of screen
 
-        calcHistory = new TextArea("No History");
+        calcHistory = new TextArea(" ");
         calcHistory.setEditable(false);
 
         VBox bottomBox = new VBox();
