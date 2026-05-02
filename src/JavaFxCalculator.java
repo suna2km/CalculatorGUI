@@ -4,14 +4,13 @@
  */
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
@@ -27,6 +26,7 @@ public class JavaFxCalculator extends Application {
 
     private Text memoryText; //GUI control
     private double memory = 0.0; //
+    private TextArea calcHistory;
 
     // Event handler for all the 16 Buttons
     EventHandler handler = evt -> {
@@ -83,6 +83,7 @@ public class JavaFxCalculator extends Application {
                 result = Math.sqrt(result);
                 inStr = ""+ result;
                 tfDisplay.setText(inStr);
+
                 lastOperator = '=';
                 inStr = "0";
                 break;
@@ -109,7 +110,8 @@ public class JavaFxCalculator extends Application {
 
             case "MR":
                 inStr = String.valueOf(memory);
-                tfDisplay.setText(String.valueOf(memory));
+                tfDisplay.setText(inStr);
+                break;
             case "MC":
                 memoryText.setText("Memory = 0.0");
                 memory = 0;
@@ -142,6 +144,8 @@ public class JavaFxCalculator extends Application {
     // based on the previous operator.
     private void compute() {
         double inNum = Double.parseDouble(inStr);
+        String expression = result + " " + lastOperator + " " + inNum;
+
         inStr = "0";
         if (lastOperator == ' ') {
             result = inNum;
@@ -159,6 +163,9 @@ public class JavaFxCalculator extends Application {
             // Keep the result for the next operation
         }
         tfDisplay.setText(result + "");
+
+        calcHistory.appendText(expression + " = " + result + "\n");
+
     }
 
     // Setup the UI
@@ -195,6 +202,10 @@ public class JavaFxCalculator extends Application {
             paneButton.getColumnConstraints().add(columns[i]);
         }
 
+        // Setup up the scene graph rooted at a BorderPane (of 5 zones)
+        BorderPane root = new BorderPane();
+        root.setPadding(new Insets(15, 15, 15, 15));  // top, right, bottom, left
+
         // Setup 28 Buttons and add to GridPane; and event handler
         btns = new Button[28];
         for (int i = 0; i < btns.length; ++i) {
@@ -204,23 +215,61 @@ public class JavaFxCalculator extends Application {
 
             switch (btnLabels[i]){
                 case "M+": case "M-": case "MR": case "MC":
-                    btns[i].setStyle("-fx-color: blue");
+                    btns[i].setStyle("-fx-color: #6495ed");
+                    break;
+
+                case "+": case "-": case "*": case "÷": case "√": case "^":
+                    btns[i].setStyle("-fx-color: #FFB6C1");
+                    break;
+
+                case ".": case "=":
+                    btns[i].setStyle("-fx-color: #ffe4c4");
+                    break;
+
+                case "C": case "CE": case "←":
+                    btns[i].setStyle("-fx-color: #DDA0DD");
+                    break;
+
+                case "Off":
+                    btns[i].setStyle("-fx-color: #8a2b2b");
+                    btns[i].setOnAction(actionEvent -> Platform.exit());
+                    break;
+
+                case "Dark":
+                    btns[i].setStyle("-fx-text-fill: white; -fx-background-color: black;");
+                    btns[i].setOnAction(actionEvent -> {
+                        root.setStyle("-fx-text-fill: white; -fx-background-color: black;");
+                        memoryText.setStyle("-fx-fill: white;");
+                    });
+                    break;
+
+                case "Light":
+                    btns[i].setStyle("-fx-background-color: #F5F5DC;");
+                    btns[i].setOnAction(actionEvent -> {
+                        root.setStyle("-fx-text-fill: black; -fx-background-color: white;");
+                        memoryText.setStyle("-fx-fill: black;");
+                    });
                     break;
             }
             paneButton.add(btns[i], i % numCols, i / numCols);  // control, col, row
         }
 
-        // Setup up the scene graph rooted at a BorderPane (of 5 zones)
-        BorderPane root = new BorderPane();
-        root.setPadding(new Insets(15, 15, 15, 15));  // top, right, bottom, left
         root.setTop(tfDisplay);     // Top zone contains the TextField
         root.setCenter(paneButton); // Center zone contains the GridPane of Buttons
 
         memoryText = new Text("Memory = 0.0");
         root.setBottom(memoryText); //add the memory Text GUI control to bottom of screen
 
+        calcHistory = new TextArea("No History");
+        calcHistory.setEditable(false);
+
+        VBox bottomBox = new VBox();
+        bottomBox.getChildren().addAll(memoryText, calcHistory);
+
+        root.setBottom(bottomBox);
+
         // Set up scene and stage
-        primaryStage.setScene(new Scene(root, 300, 300));
+        primaryStage.setScene(new Scene(root, 300, 400));
         primaryStage.setTitle("JavaFX Calculator");
         primaryStage.show();
     }
