@@ -73,7 +73,7 @@ The UI is structured using JavaFX layout managers:
 
 ## Console Output Testing Example
 ## Calculator Demo
-![javafxdemo](Calculator_javafxdemo.gif)
+![javafxdemo](javafxdemo.gif)
 
 ## New Concepts
 - Java Fx Framework
